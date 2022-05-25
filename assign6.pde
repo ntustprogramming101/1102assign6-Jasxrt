@@ -23,7 +23,7 @@ final int START_BUTTON_Y = 360;
 Player player;
 Item[] items;
 Enemy[] enemies;
-Laser lasers;
+
 
 final int GAME_INIT_TIMER = 7200;
 int gameTimer = GAME_INIT_TIMER;
@@ -161,7 +161,7 @@ void initGame() {
     }
   }
 
-  lasers=new Laser();
+
 
 
   // Initialize items and their position
@@ -258,11 +258,6 @@ void draw() {
       e.display();
       e.checkCollision(player);
     }
-
-    lasers.update();
-    lasers.display();
-    lasers.checkCollision(player);
-    lasers.fire(robot.x, robot.y, player.x, player.y);
 
     // Caution Sign
     Enemy nextRowEnemy = getEnemyByRow(player.row + 5);

@@ -7,29 +7,39 @@ class Robot extends Enemy {
   final int HAND_OFFSET_X_FORWARD = 64;
   final int HAND_OFFSET_X_BACKWARD = 16;
   float speed=2f;
+  Laser lasers;
+
+
   Robot(float x, float y) {
     super(x, y);
+    lasers=new Laser();
   }
 
   void display() {
-    image(robot, x, y);
+
+    lasers.display();
+    if (speed<=0) {
+      pushMatrix();
+      translate(x+w, y);
+      scale(-1, 1);
+      image(robot, 0, 0);
+      popMatrix();
+    } else {
+      image(robot, x, y);
+    }
+  }
+  void checkCollision(Player player) {
+    lasers.checkCollision(player);
   }
 
   void update() {
+    lasers.update();
     x += speed;
     if (x+h>= width) {
       speed=-2f;
-      pushMatrix();
-      translate(x, y);
-      scale(1, -1);
-      popMatrix();
     }
     if (x<=0) {
       speed=2f;
-      pushMatrix();
-      translate(x, y);
-      scale(1, -1);
-      popMatrix();
     }
     if (player.y+player.h>y-160&&player.y<y+h+160) {
       if (speed==2f) {
@@ -46,7 +56,15 @@ class Robot extends Enemy {
         }
       }
     }
+
+    if (speed==2f) {
+      lasers.fire(x-HAND_OFFSET_X_FORWARD, y-HAND_OFFSET_Y, player.x, player.y);
+    }
+    if (speed==-2f) {
+      lasers.fire(x-HAND_OFFSET_X_BACKWARD, y-HAND_OFFSET_Y, player.x, player.y);
+    }
   }
+
   // HINT: Player Detection in update()
   /*
 
